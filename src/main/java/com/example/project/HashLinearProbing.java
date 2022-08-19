@@ -3,13 +3,13 @@ package com.example.project;
 import java.util.Random;
 
 public class HashLinearProbing {
-    private int hsize; // tamano de la tabla hash
-    private Integer[] buckets; // array que representa la tabla hash
+   private int hsize; // tamano de la tabla hash
+    private Persona[] buckets; // array que representa la tabla hash
     private Integer AVAILABLE;
     private int size; // cantidad de elementos en la tabla hash
 
     public HashLinearProbing(int hsize) {
-        this.buckets = new Integer[hsize];
+        this.buckets = new Persona[hsize];
         this.hsize = hsize;
         this.AVAILABLE = Integer.MIN_VALUE;
         this.size = 0;
@@ -23,8 +23,11 @@ public class HashLinearProbing {
         return hash;
     }
 
-    public void insertHash(int key) {
-        Integer wrappedInt = key;
+    public void insertHash(Persona persona) {
+        Persona wrappedInt = persona;
+        String dni = persona.getDni();
+        int key = Integer.parseInt(dni);
+
         int hash = hashing(key);
 
         if (isFull()) {
@@ -32,8 +35,9 @@ public class HashLinearProbing {
             return;
         }
 
-        for (int i = 0; i < hsize; i++) {
-            if (buckets[hash] == null || buckets[hash] == AVAILABLE) {
+        for (int i = 0; i < hsize; i++) { 
+            int element = Integer.parseInt(buckets[hash].getDni());
+            if (buckets[hash] == null || element == AVAILABLE) {
                 buckets[hash] = wrappedInt;
                 size++;
                 return;
@@ -47,8 +51,10 @@ public class HashLinearProbing {
         }
     }
 
-    public void deleteHash(int key) {
-        Integer wrappedInt = key;
+    public void deleteHash(String dni) {
+        
+        int key = Integer.parseInt(dni);
+        String wrappedInt = dni;
         int hash = hashing(key);
 
         if (isEmpty()) {
@@ -59,6 +65,15 @@ public class HashLinearProbing {
         for (int i = 0; i < hsize; i++) {
             if (buckets[hash] != null && buckets[hash].equals(wrappedInt)) {
                 buckets[hash] = AVAILABLE;
+                size--;
+                return;
+        }
+
+        for (int i = 0; i < hsize; i++) {
+            int element = Integer.parseInt(buckets[hash].getDni());
+            if (buckets[hash] != null && buckets[hash].getDni().equals(wrappedInt)) {
+                element = AVAILABLE;
+                buckets[hash] = null;
                 size--;
                 return;
             }
@@ -72,18 +87,11 @@ public class HashLinearProbing {
         System.out.println("Clave " + key + " no encontrada");
     }
 
-    public void displayHashtable() {
-        for (int i = 0; i < hsize; i++) {
-            if (buckets[i] == null || buckets[i] == AVAILABLE) {
-                System.out.println("Celda " + i + ": Vacia");
-            } else {
-                System.out.println("Celda " + i + ": " + buckets[i].toString());
-            }
-        }
-    }
+    public int findHash(String dni) {
 
-    public int findHash(int key) {
-        Integer wrappedInt = key;
+        String wrappedInt = dni;
+        int key = Integer.parseInt (dni);
+        
         int hash = hashing(key);
 
         if (isEmpty()) {
@@ -94,7 +102,8 @@ public class HashLinearProbing {
         for (int i = 0; i < hsize; i++) {
             try {
                 if (buckets[hash].equals(wrappedInt)) {
-                    buckets[hash] = AVAILABLE;
+                    int element = Integer.parseInt(buckets[hash].getDni());
+                    element = AVAILABLE;
                     return hash;
                 }
             } catch (Exception E) {
@@ -109,7 +118,6 @@ public class HashLinearProbing {
         System.out.println("Clave " + key + " no encontrada!");
         return -1;
     }    
-   
     public boolean isFull() {        
         return size == hsize;
     }
@@ -119,11 +127,13 @@ public class HashLinearProbing {
         for (int i = 0; i < hsize; i++) {
             if (buckets[i] != null) {
                 response = false;
-                break;
+                return response;
+                //break;
             }
         }
         return response;
     }
+
 
     public static void main (String[] args){
         HashLinearProbing tb = new HashLinearProbing(10);

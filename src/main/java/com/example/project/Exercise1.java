@@ -19,16 +19,23 @@ public class Exercise1 {
         System.out.println(obj.encontrarPersona("12345678"));
     }
 
-    public void insertarPersona(Persona obj){
+  public void insertarPersona(Persona obj) {
+        int indiceArray = Integer.parseInt(obj.DNI);
+        tb.insertHash(indiceArray);
         // Llamar al metodo 'insertHash' modificado
     }
 
-    public void eliminarPersona(String dni){
+    public void eliminarPersona(String dni) {
         // Llamar al metodo 'deleteHash' modificado
+        int indiceArray1 = Integer.parseInt(dni);
+        tb.deleteHash(indiceArray1);
     }
 
     // Retorna NULL quando no se encontro el dni, y el nombre de la persona si lo encontro
-    public String encontrarPersona(String dni){
-        return null;
-    }    
+    public String encontrarPersona(String dni) {
+        int indiceArray = Integer.parseInt(dni);
+        int cont = 0;
+      
+        return tb.findHash(indiceArray);
+    }
 }
